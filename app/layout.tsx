@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
+import Sidebar from "@/components/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,6 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="min-h-screen flex flex-col">
+        {/* <header className="bg-black text-white p-3 text-center text-2xl">
+          Job Tracker
+        </header> */}
+        <Sidebar />
         <div className="grow">{children}</div>
         <ToastContainer
           position="top-right"

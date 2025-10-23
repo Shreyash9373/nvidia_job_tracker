@@ -11,7 +11,7 @@ interface Job {
 const page = () => {
   const [date, setDate] = useState<string>("");
   const [jobs, setJobs] = useState<Job[]>([]);
-  const [flag, setFlag] = useState(0);
+  const [loader, setLoader] = useState(false);
   const [totalCompletedJobs, setTotalCompletedJobs] = useState(0);
   const [totalReportedJobs, setTotalReportedJobs] = useState(0);
 
@@ -19,17 +19,19 @@ const page = () => {
   console.log({ jobs });
   const viewJob = async () => {
     try {
+      setLoader(true);
       const result = await api.get(`/api/addJob/${date}`);
       setTotalCompletedJobs(result.data.total.total_completed);
       setTotalReportedJobs(result.data.total.total_reported);
       setJobs(result.data.data);
-      setFlag(1);
     } catch (error) {
       console.log({ error });
+    } finally {
+      setLoader(false);
     }
   };
   return (
-    <div className="flex flex-col items-center mt-20 space-y-2 ">
+    <div className="flex flex-col items-center mt-12 space-y-2 ">
       <label>Select Date</label>
       <input
         className="border border-gray-400 p-2 rounded-3xl"
@@ -38,8 +40,12 @@ const page = () => {
         onChange={(e) => setDate(e.target.value)}
       />
       <Button onClick={viewJob} name="View Jobs" px="2" py="0.5" />
-      {jobs.length !== 0 ? (
+      {loader && <p className="animate-pulse mt-4">Loading...</p>}
+      {jobs.length !== 0 && !loader ? (
         <>
+          {/* <div>
+            {loader === true && <p className="animate-pulse">Loading...</p>}
+          </div> */}
           <div className="flex w-[85%] justify-between mt-3">
             <p>
               <span className="font-bold">Total Completed: </span>{" "}
@@ -76,7 +82,9 @@ const page = () => {
           ))}
         </>
       ) : (
-        <p className="mt-4 text-lg">No Jobs available for this date</p>
+        !loader && (
+          <p className="mt-4 text-lg">No Jobs available for this date</p>
+        )
       )}
     </div>
   );
