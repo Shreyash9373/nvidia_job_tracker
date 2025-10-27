@@ -31,7 +31,7 @@ const page = () => {
     }
   };
   return (
-    <div className="flex flex-col items-center mt-12 space-y-2 ">
+    <div className="flex flex-col items-center mt-5 space-y-2 ">
       <label>Select Date</label>
       <input
         className="border border-gray-400 p-2 rounded-3xl"

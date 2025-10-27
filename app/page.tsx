@@ -1,6 +1,7 @@
 "use client";
 import Button from "@/components/Button";
 import { api } from "@/lib/apiClient";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 interface jobDataType {
@@ -31,9 +32,11 @@ export default function addJob() {
     "4 to 5",
     "5 to 6",
   ];
+  const [jobAdded, setJobAdded] = useState(false);
   const submitJob = async (data: jobDataType) => {
     console.log({ data });
     try {
+      setJobAdded(true);
       const response = await api.post(`/api/addJob`, data);
       console.log({ response });
       if (response) {
@@ -42,6 +45,8 @@ export default function addJob() {
       reset();
     } catch (error) {
       toast.error("Failed to add Job");
+    } finally {
+      setJobAdded(false);
     }
   };
   const addJob = () => {
@@ -62,7 +67,7 @@ export default function addJob() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="flex justify-center items-center min-h-screen ">
       <div className="bg-green-500 p-6 rounded-2xl ">
         <form
           onSubmit={handleSubmit((data) => submitJob(data))}
@@ -121,8 +126,13 @@ export default function addJob() {
           </select>
           <input
             type="submit"
-            className="bg-black text-white px-4 py-2 rounded-full hover:bg-gray-600"
-            value="Add Job"
+            disabled={jobAdded}
+            className={`bg-black text-white px-4 py-2 rounded-full  ${
+              jobAdded === true
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:bg-gray-600"
+            } `}
+            value={jobAdded === true ? "Adding Job..." : "Add Job"}
           />
         </form>
       </div>

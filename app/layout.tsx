@@ -31,7 +31,7 @@ export default function RootLayout({
           Job Tracker
         </header> */}
         <Sidebar />
-        <div className="grow">{children}</div>
+        <div className="grow bg-gray-300 py-2 ">{children}</div>
         <ToastContainer
           position="top-right"
           autoClose={3000}
@@ -51,7 +51,7 @@ export default function RootLayout({
             fontFamily: "sans-serif",
           }}
         />
-        <footer className="bg-black text-white p-3 w-full text-center">
+        <footer className="bg-black text-white p-3 w-full text-center ">
           ©2025, Shreyas Raut
         </footer>
       </body>

@@ -8,7 +8,7 @@ const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="relative w-full bg-black text-white p-3 flex items-center justify-between">
+    <div className="fixed top-0 left-0 z-50 w-full bg-black text-white p-3 flex items-center justify-between">
       {/* === Hamburger / Cross Button === */}
       <button
         className="z-50 text-white focus:outline-none"
