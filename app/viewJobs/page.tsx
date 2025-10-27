@@ -34,7 +34,7 @@ const page = () => {
     <div className="flex flex-col items-center mt-5 space-y-2 ">
       <label>Select Date</label>
       <input
-        className="border border-gray-400 p-2 rounded-3xl"
+        className="border border-gray-400 p-2 rounded-3xl text-black"
         type="date"
         value={date}
         onChange={(e) => setDate(e.target.value)}
@@ -83,7 +83,9 @@ const page = () => {
         </>
       ) : (
         !loader && (
-          <p className="mt-4 text-lg">No Jobs available for this date</p>
+          <p className="mt-4 text-lg text-black">
+            No Jobs available for this date
+          </p>
         )
       )}
     </div>
