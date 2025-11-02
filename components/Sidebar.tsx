@@ -3,9 +3,25 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Menu } from "lucide-react"; // nice icons
+import Button from "./Button";
+import { api } from "@/lib/apiClient";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      const response = await api.post("/api/auth/logout");
+      if (response) {
+        toast.success("Logged out successfully");
+        router.push("/login");
+      }
+    } catch (error) {
+      toast.error("Failed to logout");
+    }
+  };
 
   return (
     <div className="fixed top-0 left-0 z-50 w-full bg-black text-white p-3 flex items-center justify-between">
@@ -34,19 +50,20 @@ const Sidebar = () => {
           >
             <nav className="flex flex-col space-y-4 mt-10">
               <Link
-                href="/"
+                href="/dashboard"
                 className="text-lg font-medium hover:text-green-400 transition"
                 onClick={() => setIsOpen(false)}
               >
                 ➕ Add Job
               </Link>
               <Link
-                href="/viewJobs"
+                href="/dashboard/viewJobs"
                 className="text-lg font-medium hover:text-green-400 transition"
                 onClick={() => setIsOpen(false)}
               >
                 👁️ View Job
               </Link>
+              <Button onClick={handleLogout} name="Logout" px="2" py="1" />
             </nav>
           </motion.aside>
         )}
