@@ -1,6 +1,7 @@
 "use client";
 import Button from "@/components/Button";
 import { api } from "@/lib/apiClient";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
@@ -44,12 +45,16 @@ export default function addJob() {
     "slow-for-lead",
   ];
   const [jobAdded, setJobAdded] = useState(false);
+  const router = useRouter();
   const submitJob = async (data: jobDataType) => {
     try {
       setJobAdded(true);
       const response = await api.post(`/api/addJob`, data);
-      if (response) {
+      if (response.status === 201) {
         toast.success("Job added Successfully");
+      } else if (response.status === 401) {
+        toast.error("Session Expired! Please login again.");
+        router.push("/login");
       }
       reset();
     } catch (error) {
