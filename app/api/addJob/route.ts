@@ -3,9 +3,24 @@ import pool from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const auth = await authMiddleware(req);
-  if ("user" in auth === false) return auth;
-  const { user } = auth as any;
+  // const auth = await authMiddleware(req);
+  // if ("user" in auth === false) return auth;
+  // const { user } = auth as any;
+  const authResult = await authMiddleware(req);
+
+  // If middleware returned a NextResponse (error or refreshed token)
+  if (authResult instanceof NextResponse) {
+    // If it's a valid refresh response → continue request normally
+    if ((authResult as any).user) {
+      const user = (authResult as any).user;
+      return NextResponse.json({ message: "User data", user });
+    }
+    // Otherwise, just return middleware's response (error)
+    return authResult;
+  }
+
+  // If token valid and user decoded
+  const { user } = authResult;
 
   try {
     const body = await req.json();
