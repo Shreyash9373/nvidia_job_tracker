@@ -24,7 +24,7 @@ export async function GET(req: NextRequest, { params }: any) {
   try {
     const date = params.date;
     const result = await pool.query(
-      `select job_name,completed_job,reported_job,time_slot from jobs where job_date=$1 and user_id=$2`,
+      `select job_name,completed_job,reported_job,time_slot from jobs where job_date=$1 and user_id=$2 ORDER BY created_at DESC`,
       [date, user.id]
     );
     const total = await pool.query(
