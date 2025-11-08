@@ -50,15 +50,17 @@ export default function addJob() {
     try {
       setJobAdded(true);
       const response = await api.post(`/api/addJob`, data);
-
-      if (response.status === 401) {
-        toast.error("Session Expired! Please login again.");
-        router.push("/login");
+      if (response.status === 201) {
+        toast.success("Job added Successfully");
       }
-      toast.success("Job added Successfully");
 
       reset();
-    } catch (error) {
+    } catch (error: any) {
+      if (error.status === 401) {
+        toast.error("Session Expired! Please login again.");
+        router.push("/login");
+        return;
+      }
       toast.error("Failed to add Job");
     } finally {
       setJobAdded(false);

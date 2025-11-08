@@ -24,6 +24,10 @@ api.interceptors.response.use(
     const originalRequest = error.config;
     if (!originalRequest) return Promise.reject(error);
 
+    // ✅ Skip retry for refresh route itself
+    if (originalRequest.url?.includes("/api/refresh")) {
+      return Promise.reject(error);
+    }
     // avoid infinite loops, mark retries
     originalRequest._retry = originalRequest._retry || false;
 
@@ -33,14 +37,17 @@ api.interceptors.response.use(
 
       try {
         // call refresh endpoint (cookies sent automatically)
-        await api.post("/api/refresh");
-        // retry original request after refresh
-        return api(originalRequest);
+        const response = await api.post("/api/refresh");
+        console.log("token response", response);
+        if (response.status === 200) {
+          // retry original request after refresh
+          return api(originalRequest);
+        }
       } catch (refreshError) {
         // refresh failed -> redirect to login
-        if (typeof window !== "undefined") {
-          window.location.href = "/login";
-        }
+        // if (typeof window !== "undefined") {
+        //   window.location.href = "/login";
+        // }
         return Promise.reject(refreshError);
       }
     }
